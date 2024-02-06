@@ -18,7 +18,7 @@
         <div class="col-lg-9">
           <h2 class="m-0 p-0">Sign up</h2>
           <p class="m-0 p-0 mb-3 text-muted">Create your account</p>
-          <form class="row g-2 needs-validation" novalidate>
+          <form id="form" class="row g-2 needs-validation" novalidate>
             <div class="col-lg-6">
               <label for="name" class="form-label">Name</label>
               <input
@@ -228,26 +228,19 @@
     ></script>
     <script>
       (() => {
-        "use strict";
-
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        const forms = document.querySelectorAll(".needs-validation");
-
-        // Loop over them and prevent submission
-        Array.from(forms).forEach((form) => {
-          form.addEventListener(
-            "submit",
-            (event) => {
-              if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-
-              form.classList.add("was-validated");
-            },
-            false
-          );
-        });
+        const form = document.getElementById("form");
+        form.addEventListener(
+          "submit",
+          (event) => {
+            console.log("Validity ", form.checkValidity());
+            if (!form.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add("was-validated");
+          },
+          false
+        );
       })();
     </script>
   </body>
