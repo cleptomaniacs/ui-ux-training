@@ -21,3 +21,21 @@ var fun1 = () => {
 };
 console.log(age);
 fun1();
+
+Array.from("Tanzania").forEach((letter) => console.log(letter.toUpperCase()));
+
+for (course of courses) {
+  console.log(course.toUpperCase());
+}
+
+var entries = courses.entries();
+for (entry of entries) {
+  console.log(entry);
+}
+console.log("Entries: ", ...entries);
+
+var keys = courses.keys();
+console.log("Keys: ", ...keys);
+
+var values = courses.values();
+console.log("Values: ", ...values);
