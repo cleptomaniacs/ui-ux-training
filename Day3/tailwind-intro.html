@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container mx-auto">
+      <h2 class="bg-gray-100 text-red-600 p-20">This is mx auto div</h2>
+    </div>
+
+    <b>Tailwind CSS grid-cols Class</b>
+
+    <div id="main" class="m-8 grid grid-cols-3 gap-2 justify-evenly">
+      <div class="bg-green-700 w-26 h-12 rounded-lg">1</div>
+      <div class="bg-green-500 w-26 h-12 rounded-lg">2</div>
+      <div class="bg-green-300 w-26 h-12 rounded-lg">3</div>
+      <div class="bg-green-700 w-26 h-12 rounded-lg">4</div>
+      <div class="bg-green-500 w-26 h-12 rounded-lg">5</div>
+      <div class="bg-green-300 w-26 h-12 rounded-lg">6</div>
+    </div>
+
+    <b>Tailwind CSS col-span Class</b>
+
+    <div id="main" class="m-8 grid grid-cols-3 gap-2 justify-evenly">
+      <div class="bg-green-300 rounded-lg h-12">1</div>
+      <div class="bg-green-300 rounded-lg h-12">2</div>
+      <div class="bg-green-300 rounded-lg h-12">3</div>
+      <div class="bg-green-500 col-span-2 rounded-lg h-12">4</div>
+      <div class="bg-green-300 rounded-lg h-12">5</div>
+      <div class="bg-green-500 col-span-3 rounded-lg h-12">6</div>
+    </div>
+    <button class="px-20 py-4 rounded-lg bg-blue-700 text-white">Hello</button>
+    <div class="absolute left-0 right-0 bottom-0 p-20 bg-gray-400">footer</div>
+  </body>
+</html>
