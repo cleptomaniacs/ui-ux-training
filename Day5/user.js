@@ -1,5 +1,6 @@
 const fs = require("fs");
 let logUser = (username) => {
+  username = username.trim();
   fs.readFile("./names.txt", "utf8", (err, data) => {
     if (err) {
       throw err;
@@ -21,4 +22,4 @@ let logUser = (username) => {
   });
 };
 
-logUser("Hussein");
+logUser("Meshack");
