@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import Pagination from "./Pagination";
+import Filter from "./Filter";
+import Search from "./Search";
+import Table from "./Table";
+const itemsPerPage = 10; // Number of items to show per page
 function StudentList() {
+  const [currentPage, setCurrentPage] = useState(1);
   const [userForm, setUserForm] = useState([]);
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState({
@@ -9,8 +14,18 @@ function StudentList() {
     email: "",
     rollno: "",
   });
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    const indexOfLastPost = pageNumber * itemsPerPage;
+    const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+    const page = data.slice(indexOfFirstPost, indexOfLastPost);
+    setUserForm(page);
+  };
 
   const deleteStudent = (_id) => {
+    if (!window.confirm("Are you sure you want to delete this data?")) {
+      return;
+    }
     axios
       .delete(`http://localhost:4000/students/delete-student/${_id}`)
       .then(() => {
@@ -24,7 +39,7 @@ function StudentList() {
   const onChange = (event) => {
     let search = event.target.value;
     if (search === "") {
-      setUserForm(data);
+      resetPagination(data, currentPage);
       return;
     }
 
@@ -53,7 +68,7 @@ function StudentList() {
       currentFilter.email === "" &&
       currentFilter.rollno === ""
     ) {
-      setUserForm(data);
+      resetPagination(data, currentPage);
       return;
     }
     const filteredData = data.filter(
@@ -70,99 +85,47 @@ function StudentList() {
     setUserForm(filteredData);
   };
 
-  const fetchStudents = () => {
+  const resetPagination = (data, currentPage) => {
+    const indexOfLastPost = currentPage * itemsPerPage;
+    const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+    const page = data.slice(indexOfFirstPost, indexOfLastPost);
+    setUserForm(page);
+  };
+
+  useEffect(() => {
     axios
       .get("http://localhost:4000/students/")
       .then((res) => {
-        setUserForm(res.data.data);
+        //setUserForm(res.data.data);
         setData(res.data.data);
+        const resData = res.data.data;
+        resetPagination(resData, 1);
       })
       .catch((error) => {
         console.log(error);
       });
-  };
-
-  useEffect(() => {
-    fetchStudents();
   }, []);
 
   return (
     <div>
-      <div className="row mb-2">
-        <div className="col-lg-4">
-          <input
-            className="form-control"
-            placeholder="Search..."
-            name="search"
-            onChange={onChange}
-          />
-        </div>
-      </div>
-      <div className="row">
-        <input
-          type="text"
-          className="form-control col"
-          placeholder="Name"
-          name="name"
-          onChange={onKeyChange}
-          value={filter.name}
-        />
-        &nbsp;
-        <input
-          type="text"
-          className="form-control col"
-          placeholder="Email"
-          name="email"
-          onChange={onKeyChange}
-          value={filter.email}
-        />
-        &nbsp;
-        <input
-          type="text"
-          className="form-control col"
-          placeholder="Roll Number"
-          name="rollno"
-          onChange={onKeyChange}
-          value={filter.rollno}
+      <Search onChange={onChange} />
+      <Filter filter={filter} onKeyChange={onKeyChange} />
+      <Table
+        columns={["#", "Name", "Email", "Roll No", "Action"]}
+        tableData={userForm}
+        onDelete={deleteStudent}
+      />
+      <div className="d-flex justify-content-between">
+        <p className="form-text text-muted">
+          Showing {userForm.length} of {data.length} records
+        </p>
+        <Pagination
+          currentPage={currentPage}
+          postsPerPage={itemsPerPage}
+          totalPosts={data.length}
+          paginate={paginate}
         />
       </div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Roll no</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userForm.map((user, index) => {
-            return (
-              <tr key={index}>
-                <th scope="row">{user._id}</th>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>@{user.rollno}</td>
-                <td>
-                  <Link
-                    className="btn btn-primary btn-sm me-2"
-                    to={"/edit-student/" + user._id}
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => deleteStudent(user._id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
     </div>
   );
 }
