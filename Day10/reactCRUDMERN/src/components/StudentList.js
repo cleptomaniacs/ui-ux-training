@@ -4,11 +4,13 @@ import Pagination from "./Pagination";
 import Filter from "./Filter";
 import Search from "./Search";
 import Table from "./Table";
-const itemsPerPage = 10; // Number of items to show per page
+import Sorting from "./Sorting";
+const itemsPerPage = 3; // Number of items to show per page
 function StudentList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [userForm, setUserForm] = useState([]);
   const [data, setData] = useState([]);
+  const [sortDir, setSortDir] = useState(false);
   const [filter, setFilter] = useState({
     name: "",
     email: "",
@@ -92,6 +94,13 @@ function StudentList() {
     setUserForm(page);
   };
 
+  const onSort = (key) => {
+    let dir = !sortDir;
+    setSortDir(dir);
+    const sorted = Sorting({ key: key, dir: dir, data: data });
+    resetPagination(sorted, currentPage);
+  };
+
   useEffect(() => {
     axios
       .get("http://localhost:4000/students/")
@@ -111,9 +120,11 @@ function StudentList() {
       <Search onChange={onChange} />
       <Filter filter={filter} onKeyChange={onKeyChange} />
       <Table
-        columns={["#", "Name", "Email", "Roll No", "Action"]}
+        columns={["#", "Name", "Email", "RollNo", "Action"]}
         tableData={userForm}
         onDelete={deleteStudent}
+        onSort={onSort}
+        onAsc={sortDir}
       />
       <div className="d-flex justify-content-between">
         <p className="form-text text-muted">

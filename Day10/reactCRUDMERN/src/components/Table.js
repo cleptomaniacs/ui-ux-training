@@ -1,16 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Table = ({ columns, tableData, onDelete }) => {
+const Table = ({ columns, tableData, onDelete, onSort, onAsc }) => {
   return tableData.length > 0 ? (
     <table className="table table-bordered table-striped mt-4">
       <thead>
         <tr>
           {columns.length > 0 &&
             columns.map((col) => (
-              <th scope="col" key={col}>
-                {col}
-              </th>
+              <td
+                key={col}
+                onClick={() => onSort(col)}
+                style={{ cursor: "pointer" }}
+              >
+                <p className="m-0 p-0 d-flex justify-content-between">
+                  {col}
+                  <span>{onAsc ? "↑" : "↓"}</span>
+                </p>
+              </td>
             ))}
         </tr>
       </thead>
